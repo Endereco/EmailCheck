@@ -1,6 +1,6 @@
 {
   "name": "@endereco/emailcheck",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "EmailCheck.js",
   "scripts": {
