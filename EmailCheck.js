@@ -131,7 +131,7 @@ function EmailCheck(config) {
                     reject({});
                 }
 
-            }, 3000);
+            }, 4000);
         });
     };
 
