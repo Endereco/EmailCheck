@@ -61,11 +61,6 @@ function EmailCheck(config) {
             console.log('Could not initiate EmailCheck because of error.', e);
         }
 
-        // Generate TID if accounting service is set.
-        if (window.accounting && ('not_set' === $self.config.tid)) {
-            $self.config.tid = window.accounting.generateTID();
-        }
-
         // Disable browser autocomplete
         if ($self.isChrome()) {
             $self.inputElement.setAttribute('autocomplete', 'autocomplete_' + Math.random().toString(36).substring(2) + Date.now());
@@ -92,10 +87,31 @@ function EmailCheck(config) {
                     event = $self.createEvent('endereco.check');
                     $self.inputElement.dispatchEvent(event);
                 }
+
+                if ($data.cmd && $data.cmd.use_tid) {
+                    $self.config.tid = $data.cmd.use_tid;
+
+                    if ($self.config.serviceGroup && 0 < $self.config.serviceGroup.length) {
+                        $self.config.serviceGroup.forEach( function(serviceObject) {
+                            serviceObject.updateConfig({'tid': $data.cmd.use_tid});
+                        })
+                    }
+                }
+
             }, function($data) {
                 var event;
                 event = $self.createEvent('endereco.clean');
                 $self.inputElement.dispatchEvent(event);
+
+                if ($data.cmd && $data.cmd.use_tid) {
+                    $self.config.tid = $data.cmd.use_tid;
+
+                    if ($self.config.serviceGroup && 0 < $self.config.serviceGroup.length) {
+                        $self.config.serviceGroup.forEach( function(serviceObject) {
+                            serviceObject.updateConfig({'tid': $data.cmd.use_tid});
+                        })
+                    }
+                }
             })
 
         });
